@@ -1,11 +1,23 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Switch } from 'react-native';
+import { View, Text, StyleSheet, Switch, ActivityIndicator } from 'react-native';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { setNotificationsEnabled, setDarkMode } from '../../store/slices/settingsSlice';
+import { setNotificationsEnabled, setDarkMode, persistSettings, loadPersistedSettings } from '../../store/slices/settingsSlice';
 
 export default function SettingsScreen() {
   const dispatch = useAppDispatch();
-  const { notificationsEnabled, darkMode } = useAppSelector(state => state.settings);
+  const { notificationsEnabled, darkMode, hydrated } = useAppSelector(state => state.settings);
+
+  React.useEffect(() => {
+    if (!hydrated) {
+      dispatch(loadPersistedSettings());
+    }
+  }, [hydrated, dispatch]);
+
+  React.useEffect(() => {
+    if (hydrated) {
+      dispatch(persistSettings());
+    }
+  }, [notificationsEnabled, darkMode, hydrated, dispatch]);
 
   // Wrap dispatch in a function to match Switch signature (void return)
   const handleNotificationsChange = (value: boolean) => {
@@ -14,6 +26,14 @@ export default function SettingsScreen() {
   const handleDarkModeChange = (value: boolean) => {
     dispatch(setDarkMode(value));
   };
+
+  if (!hydrated) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#6C47FF" style={{ marginTop: 48 }} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

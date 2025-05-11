@@ -24,6 +24,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "EXPO_PUBLIC_SUPABASE_URL": "https://ciycwjtaqbwynhvrlsdu.supabase.co",
+      "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpeWN3anRhcWJ3eW5odnJsc2R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0NDUxMzAsImV4cCI6MjA2MjAyMTEzMH0.8J8n3AuT57SNhJUS6C8pqfM3YhgtJc3Gh6AAOuG8Y9s"
     }
   }
 }

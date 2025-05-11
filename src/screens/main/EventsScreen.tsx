@@ -1,13 +1,6 @@
 import * as React from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { fetchEventsStart, fetchEventsSuccess, fetchEventsFailure } from '../../store/slices/eventsSlice';
-
-const mockEvents = [
-  { id: '1', title: 'לילה מסתורי 1', date: '2025-05-10', location: 'תל אביב' },
-  { id: '2', title: 'לילה מסתורי 2', date: '2025-06-02', location: 'ירושלים' },
-  { id: '3', title: 'לילה מסתורי 3', date: '2025-07-15', location: 'חיפה' },
-];
+import { useGetEventsQuery } from '../../store/api/eventsApi';
 
 function EventItem({ title, date, location }: { title: string; date: string; location: string }) {
   return (
@@ -19,22 +12,14 @@ function EventItem({ title, date, location }: { title: string; date: string; loc
 }
 
 export default function EventsScreen() {
-  const dispatch = useAppDispatch();
-  const { events, loading, error } = useAppSelector(state => state.events);
-
-  React.useEffect(() => {
-    dispatch(fetchEventsStart());
-    setTimeout(() => {
-      dispatch(fetchEventsSuccess(mockEvents));
-    }, 800);
-  }, [dispatch]);
+  const { data: events = [], isLoading, error } = useGetEventsQuery();
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>האירועים שלי</Text>
-      {loading && <ActivityIndicator size="large" color="#6C47FF" style={{ marginVertical: 24 }} />}
-      {error && <Text style={{ color: 'red', textAlign: 'center', marginVertical: 16 }}>{error}</Text>}
-      {!loading && events.length === 0 && !error && (
+      {isLoading && <ActivityIndicator size="large" color="#6C47FF" style={{ marginVertical: 24 }} />}
+      {error && <Text style={{ color: 'red', textAlign: 'center', marginVertical: 16 }}>{'שגיאה בטעינת אירועים'}</Text>}
+      {!isLoading && events.length === 0 && !error && (
         <Text style={{ textAlign: 'center', color: '#888', marginTop: 32 }}>לא נמצאו אירועים</Text>
       )}
       <FlatList

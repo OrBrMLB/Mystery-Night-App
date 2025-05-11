@@ -1,3 +1,5 @@
+console.log('INDEX.JS ENTRYPOINT: index.js loaded');
+
 import { registerRootComponent } from 'expo';
 
 import App from './App';

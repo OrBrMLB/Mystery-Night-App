@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Provider as ReduxProvider } from 'react-redux';
 import { ThemeProvider } from 'styled-components/native';
 import { I18nManager, Text } from 'react-native';
-import { store } from './store';
+import store from './store';
 import { AppNavigator } from './navigation/AppNavigator';
 import { theme } from './constants/theme';
 
