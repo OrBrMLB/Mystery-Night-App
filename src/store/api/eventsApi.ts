@@ -15,7 +15,7 @@ export const eventsApi = createApi({
     getEvents: builder.query<EventItem[], void>({
       async queryFn() {
         const { data, error } = await supabase.from('events').select('*').order('date', { ascending: true });
-        if (error) return { error };
+        if (error) return { error: { status: parseInt(error.code, 10) || 500, data: error.message } };
         return { data: data as EventItem[] };
       },
     }),

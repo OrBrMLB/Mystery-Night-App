@@ -17,15 +17,19 @@ export function AppNavigator() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    // Session restoration for Supabase (SDK-compatible)
     const checkSession = () => {
-      const session = supabase.auth.session;
+      const session = typeof supabase.auth.session === 'function' ? supabase.auth.session() : supabase.auth.session;
+      console.log('[AppNavigator] Session on mount:', session);
       setIsAuthenticated(!!session);
       setSessionChecked(true);
     };
     checkSession();
     // Listen to auth state
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAuthenticated(!!session);
+      const currentSession = typeof supabase.auth.session === 'function' ? supabase.auth.session() : supabase.auth.session;
+      console.log('[AppNavigator] Auth state changed. Session:', session, 'Current session:', currentSession);
+      setIsAuthenticated(!!currentSession);
     });
     return () => {
       listener?.unsubscribe();

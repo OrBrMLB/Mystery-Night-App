@@ -14,6 +14,15 @@ function EventItem({ title, date, location }: { title: string; date: string; loc
 export default function EventsScreen() {
   const { data: events = [], isLoading, error } = useGetEventsQuery();
 
+  // Debug logging
+  React.useEffect(() => {
+    if (error) {
+      console.error('Supabase events fetch error:', error);
+    } else {
+      console.log('Fetched events:', events);
+    }
+  }, [events, error]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>האירועים שלי</Text>

@@ -51,10 +51,16 @@ export const persistSettings = () => async (dispatch: AppDispatch, getState: () 
 };
 
 export const loadPersistedSettings = () => async (dispatch: AppDispatch) => {
-  const loaded = await loadSettings();
-  if (loaded) {
-    dispatch(hydrateSettings(loaded));
-  } else {
+  try {
+    const loaded = await loadSettings();
+    console.log('[Settings] Loaded persisted settings:', loaded);
+    if (loaded) {
+      dispatch(hydrateSettings(loaded));
+    } else {
+      dispatch(hydrateSettings({}));
+    }
+  } catch (err) {
+    console.error('[Settings] Error loading persisted settings:', err);
     dispatch(hydrateSettings({}));
   }
 };

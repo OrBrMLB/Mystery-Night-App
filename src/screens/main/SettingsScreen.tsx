@@ -58,11 +58,47 @@ export default function SettingsScreen() {
           accessibilityLabel="הפעל/כבה מצב כהה"
         />
       </View>
+      <View style={[styles.row, { marginTop: 40, justifyContent: 'center' }]}> 
+        <Text 
+          style={styles.logoutButton}
+          accessibilityRole="button"
+          accessibilityLabel="התנתק מהחשבון"
+          onPress={async () => {
+            try {
+              await import('../../services/supabaseClient').then(({ supabase }) => supabase.auth.signOut());
+              // Debug: confirm session cleared
+              setTimeout(async () => {
+                const { supabase } = await import('../../services/supabaseClient');
+                console.log('Session after logout:', supabase.auth.session);
+              }, 500);
+            } catch (e) {
+              // Optionally handle error
+            }
+          }}
+        >
+          התנתק
+        </Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  ...StyleSheet.flatten({
+    logoutButton: {
+      color: '#fff',
+      backgroundColor: '#6C47FF',
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 8,
+      fontWeight: 'bold',
+      fontSize: 18,
+      textAlign: 'center',
+      marginTop: 16,
+      overflow: 'hidden',
+      elevation: 2,
+    },
+  }),
   container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 24, paddingTop: 32 },
   header: { fontSize: 22, fontWeight: 'bold', marginBottom: 24, textAlign: 'center' },
   row: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 },

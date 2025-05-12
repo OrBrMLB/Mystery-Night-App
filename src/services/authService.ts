@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient';
+// All methods updated for Supabase v2 compatibility
 
 export interface AuthResult {
   user: any;
@@ -7,13 +8,17 @@ export interface AuthResult {
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<AuthResult> {
-  const { data: session, error } = await supabase.auth.signInWithPassword({ email, password });
-  return { user: data?.user, session: data?.session, error };
+  const result = await supabase.auth.signIn({ email, password });
+  if (result.error) {
+    console.error('[Auth] Login error:', result.error);
+  }
+  return { user: result.user, session: result.session, error: result.error };
+
 }
 
 export async function signUpWithEmail(email: string, password: string): Promise<AuthResult> {
-  const { data, error } = await supabase.auth.signUp({ email, password });
-  return { user: data?.user, session: data?.session, error };
+  const result = await supabase.auth.signUp({ email, password });
+  return { user: result.user, session: result.session, error: result.error };
 }
 
 export async function signOut(): Promise<{ error: any }> {
@@ -22,6 +27,9 @@ export async function signOut(): Promise<{ error: any }> {
 }
 
 export async function getCurrentUser() {
-  const { data } = await supabase.auth.getUser();
-  return data.user;
+  const session = typeof supabase.auth.session === 'function' ? supabase.auth.session() : supabase.auth.session;
+  if (session && typeof session !== 'function' && 'user' in session) {
+    return session.user;
+  }
+  return null;
 }

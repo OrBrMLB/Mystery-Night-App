@@ -28,8 +28,8 @@ const ExpoSecureStoreAdapter = {
   removeItem: (key: string) => SecureStore.deleteItemAsync(key)
 };
 
+// Note: 'storage' is not a valid property in SupabaseClientOptions v2+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  storage: ExpoSecureStoreAdapter,
   autoRefreshToken: true,
   persistSession: true,
   detectSessionInUrl: false

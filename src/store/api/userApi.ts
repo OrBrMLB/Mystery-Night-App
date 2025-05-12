@@ -1,5 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { User } from '../../../types';
+// import { User } from '../../../types';
+// Fallback: Inline User type for now
+export interface User {
+  id: string;
+  email: string;
+  // Add more fields as needed
+}
 
 const baseUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000';
 
